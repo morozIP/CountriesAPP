@@ -1,0 +1,171 @@
+﻿<Window x:Class="CountriesAPP.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CountriesAPP"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        Background="Gray">
+    
+    <Window.DataContext>
+        <local:ViewModel/>        
+    </Window.DataContext>
+    
+    <TabControl Margin="5">
+        <TabItem HorizontalAlignment="Right" Padding="10 0 10 0">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="3">Страны API</TextBlock>
+                </StackPanel>
+            </TabItem.Header>
+
+            <Grid Background="White" Margin="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                
+                <Grid Name="gXX" Margin="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Content="Название"/>
+                    <Label Grid.Row="0" Grid.Column="1" Content="Код Страны"/>
+                    <Label Grid.Row="0" Grid.Column="2" Content="Столица"/>
+                    <Label Grid.Row="0" Grid.Column="3" Content="Площадь"/>
+                    <Label Grid.Row="0" Grid.Column="4" Content="Население"/>
+                    <Label Grid.Row="0" Grid.Column="5" Content="Регион"/>
+
+                    <TextBox x:Name="nameBox" Grid.Row="1" Grid.Column="0" Margin="1" Text="{Binding Path=Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox x:Name="codeBox" Grid.Row="1" Grid.Column="1" Margin="1" Text="{Binding Path=Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox x:Name="capitalBox" Grid.Row="1" Grid.Column="2" Margin="1" Text="{Binding Path=Capital, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox x:Name="areaBox" Grid.Row="1" Grid.Column="3" Margin="1" Text="{Binding Path=Area, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox x:Name="populationBox" Grid.Row="1" Grid.Column="4" Margin="1" Text="{Binding Path=Population, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox x:Name="regionBox" Grid.Row="1" Grid.Column="5" Margin="1" Text="{Binding Path=Region, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                </Grid>
+                
+                <Grid Grid.Row="1" Margin="2">
+                    <DataGrid x:Name="dataG" ItemsSource="{Binding CollectionView}" IsReadOnly="True" SelectionMode="Single" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Stretch">
+                        
+                        <DataGrid.InputBindings>
+                            <MouseBinding MouseAction="LeftDoubleClick"
+                                Command="{Binding Path=MouseDoubleClickCommand}"
+                                CommandParameter="{Binding ElementName=dataG, Path=SelectedItem}" />
+                        </DataGrid.InputBindings>
+                        
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Название" Width="*" Binding="{Binding Path=Name}" CanUserSort="True"/>
+                            <DataGridTextColumn Header="Код Страны" Width="*" Binding="{Binding Path=Alpha2Code}"/>
+                            <DataGridTextColumn Header="Столица" Width="*" Binding="{Binding Path=Capital}"/>
+                            <DataGridTextColumn Header="Площадь" Width="*" Binding="{Binding Path=Area}"/>
+                            <DataGridTextColumn Header="Население" Width="*" Binding="{Binding Path=Population}"/>
+                            <DataGridTextColumn Header="Регион" Width="*" Binding="{Binding Path=Region}"/>
+                        </DataGrid.Columns>                        
+
+                    </DataGrid>
+
+                </Grid>
+                
+            </Grid>
+        </TabItem>
+        
+        <TabItem HorizontalAlignment="Right" Padding="10 0 10 0">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="3">Страны БД</TextBlock>
+                </StackPanel>
+            </TabItem.Header>
+
+            <DataGrid x:Name="dataDB" ItemsSource="{Binding CollectionViewDB, Mode=TwoWay}" IsReadOnly="True" SelectionMode="Single" EnableRowVirtualization="True" AutoGenerateColumns="False" HorizontalAlignment="Stretch" Margin="2">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Название" Width="*" Binding="{Binding Path=Name}" CanUserSort="True"/>
+                    <DataGridTextColumn Header="Код Страны" Width="*" Binding="{Binding Path=Alpha2Code}"/>
+                    <DataGridTextColumn Header="Столица" Width="*" Binding="{Binding Path=Capital}"/>
+                    <DataGridTextColumn Header="Площадь" Width="*" Binding="{Binding Path=Area}"/>
+                    <DataGridTextColumn Header="Население" Width="*" Binding="{Binding Path=Population}"/>
+                    <DataGridTextColumn Header="Регион" Width="*" Binding="{Binding Path=Region}"/>
+                </DataGrid.Columns>               
+
+            </DataGrid>
+            
+        </TabItem>
+
+        <TabItem HorizontalAlignment="Right" Padding="10 0 10 0">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Margin="3">Подключение к БД</TextBlock>
+                </StackPanel>
+            </TabItem.Header>
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <RadioButton x:Name="DefaultRadio" Content="Использовать локальное подключение" Margin="6" IsChecked="{Binding RadioChecked, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <RadioButton Content="Использовать настраиваемое подключение" Margin="6"/>                    
+                </StackPanel>
+                <Border Grid.Row="1" Background="LightGray">
+                    <Grid x:Name="PropGrid" Margin="5" Background="White" VerticalAlignment="Top">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="IsEnabled" Value="True"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, ElementName=DefaultRadio}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False"/>                                        
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        
+                        <Label Grid.Row="0" Grid.Column="0" Content="Сервер :"/>
+                        <TextBox x:Name="server" Grid.Row="0" Grid.Column="1" Text="{Binding ServerDB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="2" HorizontalAlignment="Left" Background="AliceBlue"/>
+
+                        <Label Grid.Row="2" Grid.Column="0" Content="Логин :"/>
+                        <TextBox x:Name="login" Grid.Row="2" Grid.Column="1" Text="{Binding LoginDB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="2" HorizontalAlignment="Left" Background="AliceBlue"/>
+
+                        <Label Grid.Row="3" Grid.Column="0" Content="Пароль :"/>
+                        <TextBox x:Name="pass" Grid.Row="3" Grid.Column="1" Text="{Binding PassDB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250"  Margin="2" HorizontalAlignment="Left" Background="AliceBlue"/>
+
+                        <Label Grid.Row="4" Grid.Column="0" Content="Имя базы данных :"/>
+                        <TextBox x:Name="database" Grid.Row="4" Grid.Column="1" Text="{Binding NameDB, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="250" Margin="2" HorizontalAlignment="Left" Background="AliceBlue"/>
+
+                        <Button Command="{Binding ButtonCommand}" Margin="4" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Content="Обновить данные таблицы!"/>
+
+                    </Grid>
+                </Border>
+                
+                
+            </Grid>
+            
+        </TabItem>
+    </TabControl>
+
+</Window>
